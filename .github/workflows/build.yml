@@ -21,16 +21,6 @@ jobs:
       with:
         go-version: '1.20'
 
-    - name: Retrieve tag information
-      id: branch_info
-      run: |
-        echo "SOURCE_TAG=${GITHUB_REF_NAME////-}" >> GITHUB_ENV
-
-    - name: Output branch information
-      id: output_envs
-      run: |
-        echo "SOURCE_TAG: $SOURCE_TAG"
-
     - name: Build for darwin/amd64 (mac intel)
       run: |
         GOOS=darwin GOARCH=amd64 go build -o pgpx-mac-intel pgpx.go
@@ -47,7 +37,7 @@ jobs:
       with:
         draft: false
         prerelease: false
-        release_name: Release $SOURCE_TAG
+        release_name: Release $REF
         tag_name: ${{ github.ref }}
         body_path: CHANGELOG.md
 
@@ -58,7 +48,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./pgpx-mac-intel
-        asset_name: pgpx-mac-intel-$SOURCE_TAG
+        asset_name: pgpx-mac-intel-$REF
         asset_content_type: application/octet-stream
 
     - name: Upload mac Mx (M1, M2) artifact
@@ -68,5 +58,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./pgpx-mac-m
-        asset_name: pgpx-mac-m-$SOURCE_TAG
+        asset_name: pgpx-mac-m-$REF
         asset_content_type: application/octet-stream
