@@ -3,7 +3,7 @@ name: pgpx
 on:
   workflow_dispatch:
   push:
-    tags: [ "v[1234].[0-9]+.[0-9]+" ]
+    tags: [ "v[01234].[0-9]+.[0-9]+" ]
 
 jobs:
   build:
@@ -31,14 +31,28 @@ jobs:
       run: |
         GOOS=darwin GOARCH=arm64 go build -o pgpx-mac-m pgpx.go
 
-    - name: Upload artifact (mac intel)
-      uses: actions/upload-artifact@v3
+    - name: Create release
+      uses: actions/create-release@v1
+      id: create_release
       with:
-        name: pgpx-mac-intel-${{ steps.branch_info.outputs.SOURCE_TAG }}
-        path: ./pgpx-mac-intel
+        draft: false
+        prerelease: false
+        release_name: ${{ steps.branch_info.outputs.SOURCE_TAG }}
+        tag_name: ${{ github.ref }}
+        body_path: README.md
 
-    - name: Upload artifact (mac Mx)
-      uses: actions/upload-artifact@v3
+    - name: Upload mac intel artifact
+      uses: actions/upload-release-asset@v1
       with:
-        name: pgpx-mac-m-${{ steps.branch_info.outputs.SOURCE_TAG }}
-        path: ./pgpx-mac-m
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./pgpx-mac-intel
+        asset_name: pgpx-mac-intel-${{ steps.branch_info.outputs.SOURCE_TAG }}
+        asset_content_type: application/octet-stream
+
+    - name: Upload mac Mx (M1, M2) artifact
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./pgpx-mac-m
+        asset_name: pgpx-mac-m-${{ steps.branch_info.outputs.SOURCE_TAG }}
+        asset_content_type: application/octet-stream
