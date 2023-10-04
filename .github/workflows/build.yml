@@ -29,8 +29,6 @@ jobs:
     - name: Output branch information
       id: output_envs
       run: |
-        echo "SOURCE_NAME: $SOURCE_NAME"
-        echo "SOURCE_BRANCH: $SOURCE_BRANCH"
         echo "SOURCE_TAG: $SOURCE_TAG"
 
     - name: Build for darwin/amd64 (mac intel)
