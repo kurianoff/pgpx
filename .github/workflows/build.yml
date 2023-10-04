@@ -19,9 +19,9 @@ jobs:
     - name: Retrieve branch information
       id: branch_info
       run: |
-        echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs/*/}
-        echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
-        echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
+        echo "SOURCE_NAME=${GITHUB_REF#refs/*/}" >> GITHUB_OUTPUT
+        echo "SOURCE_BRANCH=${GITHUB_REF#refs/heads/}" >> GITHUB_OUTPUT
+        echo "SOURCE_TAG::${GITHUB_REF#refs/tags/}" >> GITHUB_OUTPUT
 
     - name: Build for darwin/amd64 (mac intel)
       run: |
@@ -34,6 +34,8 @@ jobs:
     - name: Create release
       uses: actions/create-release@v1
       id: create_release
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
       with:
         draft: false
         prerelease: false
@@ -43,6 +45,8 @@ jobs:
 
     - name: Upload mac intel artifact
       uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./pgpx-mac-intel
@@ -51,6 +55,8 @@ jobs:
 
     - name: Upload mac Mx (M1, M2) artifact
       uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./pgpx-mac-m
