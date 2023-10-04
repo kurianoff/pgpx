@@ -16,6 +16,13 @@ jobs:
       with:
         go-version: '1.20'
 
+    - name: Retrieve branch information
+      id: branch_info
+      run: |
+        echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs/*/}
+        echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
+        echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
+
     - name: Build for darwin/amd64 (mac intel)
       run: |
         GOOS=darwin GOARCH=amd64 go build -o pgpx-mac-intel pgpx.go
@@ -27,11 +34,11 @@ jobs:
     - name: Upload artifact (mac intel)
       uses: actions/upload-artifact@v3
       with:
-        name: pgpx-mac-intel
+        name: pgpx-mac-intel-${{ steps.branch_info.outputs.SOURCE_TAG }}
         path: ./pgpx-mac-intel
 
     - name: Upload artifact (mac Mx)
       uses: actions/upload-artifact@v3
       with:
-        name: pgpx-mac-m
+        name: pgpx-mac-m-${{ steps.branch_info.outputs.SOURCE_TAG }}
         path: ./pgpx-mac-m
