@@ -32,7 +32,9 @@ Usage of ./pgpx:
 The typical AWS CLI command to generate the RDS IAM dynamic credentials looks like the below:
 
 ```bash
-AWS_PROFILE=${AWS_PROFILE} aws --region ${REGION} rds generate-db-auth-token --hostname ${RDS_HOSTNAME} --port ${RDS_PORT} --username "${IAM_USERNAME}" --output text
+AWS_PROFILE=${AWS_PROFILE} aws --region ${REGION} \
+  rds generate-db-auth-token --hostname ${RDS_HOSTNAME} --port ${RDS_PORT} \
+  --username "${IAM_USERNAME}" --output text
 ```
 
 where 
