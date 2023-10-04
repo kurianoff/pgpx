@@ -47,7 +47,7 @@ jobs:
       with:
         draft: false
         prerelease: false
-        release_name: Release $SOURCE_TAG
+        release_name: Release $REF
         tag_name: ${{ github.ref }}
         body_path: CHANGELOG.md
 
@@ -58,7 +58,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./pgpx-mac-intel
-        asset_name: pgpx-mac-intel-$SOURCE_TAG
+        asset_name: pgpx-mac-intel-$REF
         asset_content_type: application/octet-stream
 
     - name: Upload mac Mx (M1, M2) artifact
@@ -68,5 +68,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./pgpx-mac-m
-        asset_name: pgpx-mac-m-$SOURCE_TAG
+        asset_name: pgpx-mac-m-$REF
         asset_content_type: application/octet-stream
