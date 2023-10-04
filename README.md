@@ -82,7 +82,7 @@ In this example, we will use [Postico](https://eggerapps.at/postico2/) to connec
 
 ![Postico DB Connection Configuration](postico-connection-configuration.png)
 
-- Put the value of `RDS_USERNAME` in the `User` field
+- Put the value of `IAM_USERNAME` in the `User` field
 - Put your database name in the `Database` field
 - Put the `pgpx` proxy hostname in the 'Host' field (default: `localhost`)
 - Put the `pgpx` proxy port in the `Port` field (default: `6432`)

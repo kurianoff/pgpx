@@ -19,9 +19,9 @@ jobs:
     - name: Retrieve branch information
       id: branch_info
       run: |
-        echo "SOURCE_NAME=${GITHUB_REF#refs/*/}" >> GITHUB_OUTPUT
-        echo "SOURCE_BRANCH=${GITHUB_REF#refs/heads/}" >> GITHUB_OUTPUT
-        echo "SOURCE_TAG=${GITHUB_REF#refs/tags/}" >> GITHUB_OUTPUT
+        echo "SOURCE_NAME=${GITHUB_REF#refs/*/}" >> GITHUB_ENV
+        echo "SOURCE_BRANCH=${GITHUB_REF#refs/heads/}" >> GITHUB_ENV
+        echo "SOURCE_TAG=${GITHUB_REF/refs\/tags\//}" >> GITHUB_ENV
 
     - name: Build for darwin/amd64 (mac intel)
       run: |
@@ -39,7 +39,7 @@ jobs:
       with:
         draft: false
         prerelease: false
-        release_name: Release ${{ steps.branch_info.outputs.SOURCE_TAG }}
+        release_name: Release ${{ env.SOURCE_TAG }}
         tag_name: ${{ github.ref }}
         body_path: README.md
 
@@ -50,7 +50,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./pgpx-mac-intel
-        asset_name: pgpx-mac-intel-${{ steps.branch_info.outputs.SOURCE_TAG }}
+        asset_name: pgpx-mac-intel-${{ env.SOURCE_TAG }}
         asset_content_type: application/octet-stream
 
     - name: Upload mac Mx (M1, M2) artifact
@@ -60,5 +60,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./pgpx-mac-m
-        asset_name: pgpx-mac-m-${{ steps.branch_info.outputs.SOURCE_TAG }}
+        asset_name: pgpx-mac-m-${{ env.SOURCE_TAG }}
         asset_content_type: application/octet-stream
