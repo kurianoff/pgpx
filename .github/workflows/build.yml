@@ -85,13 +85,13 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: ${{ matrix.product }}-${{ matrix.os }}-${{ matrix.arch }}
-        path: ./${{ matrix.product }}-${{ matrix.os }}-${{ matrix.arch }} 
+        path: ./
 
     - name: Download ${{ matrix.arch }} SHA256 hash
       uses: actions/download-artifact@v3
       with:
         name: ${{ matrix.product }}-${{ matrix.os }}-${{ matrix.arch }}.sha256
-        path: ./${{ matrix.product }}-${{ matrix.os }}-${{ matrix.arch }}.sha256
+        path: ./
 
     - name: List files
       run: |
