@@ -1,3 +1,1 @@
-### v0.0.3
-
-e407a70 generalize release workflow (#12)
+368d87c chore: show product version (#16)
