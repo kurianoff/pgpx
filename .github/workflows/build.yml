@@ -45,8 +45,8 @@ jobs:
     - name: Pass ${{ matrix.arch }} SHA256 to release job
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ env.ASSET_NAME }}
-        path: ./${{ env.ASSET_NAME }}
+        name: ${{ env.ASSET_NAME }}.sha256
+        path: ./${{ env.ASSET_NAME }}.sha256
 
   create_release:
     needs: build
