@@ -92,7 +92,11 @@ jobs:
       with:
         name: ${{ matrix.product }}-${{ matrix.os }}-${{ matrix.arch }}.sha256
         path: ./${{ matrix.product }}-${{ matrix.os }}-${{ matrix.arch }}.sha256
-  
+
+    - name: List files
+      run: |
+        ls -l
+
     - name: Upload ${{ matrix.arch }} artifact
       uses: actions/upload-release-asset@v1
       env:
