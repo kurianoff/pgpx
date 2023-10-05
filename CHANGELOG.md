@@ -1,1 +1,1 @@
-368d87c chore: show product version (#16)
+9541642 fix: show compact version number (#17)
