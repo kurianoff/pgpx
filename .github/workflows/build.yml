@@ -59,16 +59,6 @@ jobs:
       run: |
         echo "REF=${{ github.event.pull_request && github.head_ref || github.ref_name }}" >> $GITHUB_ENV
 
-    - name: Update CHANGELOG
-      id: changelog
-      uses: BobAnkh/auto-generate-changelog@v1.2.5
-      with:
-        REPO_NAME: ''
-        ACCESS_TOKEN: ${{secrets.GITHUB_TOKEN}}
-        PATH: 'CHANGELOG.md'
-        COMMIT_MESSAGE: 'docs(CHANGELOG): update release notes'
-        TYPE: 'feat:Feature,fix:Bug Fixes,docs:Documentation,refactor:Refactor,perf:Performance Improvements'
-
     - name: Create release
       uses: actions/create-release@v1
       id: create_release

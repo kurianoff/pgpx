@@ -1,3 +1,3 @@
-### v0.0.2
+### v0.0.3
 
-44b646e proper labeling of arch-specific builds
+e407a70 generalize release workflow (#12)
