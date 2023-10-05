@@ -33,7 +33,7 @@ jobs:
 
     - name: Build binary for ${{ matrix.arch }}
       run: |
-        GOOS=darwin GOARCH=${{ matrix.arch }} go build -o ${{ env.ASSET_NAME }} ${{ matrix.product }}.go
+        GOOS=darwin GOARCH=${{ matrix.arch }} go build -o ${{ env.ASSET_NAME }} -ldflags "-X main.versionNumber=${{ env.REF }}" ${{ matrix.product }}.go
         sha256sum -b ${{ env.ASSET_NAME }} | awk '{ print $1; }' > ${{ env.ASSET_NAME }}.sha256
 
     - name: Pass ${{ matrix.arch }} binary to release job

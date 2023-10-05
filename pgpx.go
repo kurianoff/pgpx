@@ -17,6 +17,10 @@ import (
 	"github.com/kurianoff/pgpx/pgproxy"
 )
 
+var (
+    versionNumber string
+)
+
 type tlsLogicalConn struct {
 	net.Conn
 }
@@ -81,9 +85,15 @@ func main() {
 	dbCertPath := flag.String("dbCertPath", "", "Absolute path to the database SSL CA certificate (required)")
 	credsCmd := flag.String("credsCmd", "", "Bash command to retrieve temporary database connection password")
 	credsOverride := flag.Bool("credsOverride", true, "Indicates whether to override the password provided through the client application")
+	version := flag.Bool("version", false, "Show pgpx version information")
 
 	// Parse the command-line arguments
 	flag.Parse()
+
+	if (*version == true) {
+		fmt.Println("pgpx version " + versionNumber)
+		return
+	}
 
 	if (*credsOverride && *credsCmd == "") || *pgHostPort == "" || *dbCertPath == "" {
 		fmt.Printf("Usage of %s:\n", os.Args[0])
