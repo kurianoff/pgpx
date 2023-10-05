@@ -91,7 +91,7 @@ func main() {
 	flag.Parse()
 
 	if (*version == true) {
-		fmt.Println("pgpx version " + versionNumber)
+		fmt.Println(versionNumber)
 		return
 	}
 
