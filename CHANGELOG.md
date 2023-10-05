@@ -1,3 +1,3 @@
-# Changelog
+### v0.0.2
 
-Initial release.
+44b646e proper labeling of arch-specific builds
