@@ -18,7 +18,7 @@ import (
 )
 
 var (
-    versionNumber string
+	versionNumber string
 )
 
 type tlsLogicalConn struct {
@@ -58,8 +58,12 @@ func fetchDynamicPassword(cmdStr string) (string, error) {
 	return strings.TrimSpace(string(output)), nil
 }
 
-func dialBackendWithDynamicPassword(ctx context.Context, startupData *pgproxy.StartupData, pgHostPort string, credsCmd string, credsOverride bool) (pgproxy.LogicalConn, error) {
-	if credsOverride == true {
+func dialBackendWithDynamicPassword(ctx context.Context, startupData *pgproxy.StartupData, pgHostPort string, credsCmd string, credsOverride bool, ignoreUsername bool) (pgproxy.LogicalConn, error) {
+	// if ignoreUsername flag not set: find matching username in credsCmd, otherwise do not override password
+	overrideCredentials := credsOverride && (ignoreUsername || strings.Contains(strings.ToLower(credsCmd), strings.ToLower(startupData.Username)))
+	log.Trace().Msgf("Override credentials: %t", overrideCredentials)
+
+	if overrideCredentials {
 		dynamicPassword, err := fetchDynamicPassword(credsCmd)
 		if err != nil {
 			log.Error().Msgf("Error retrieving dynamic password: %+v", err)
@@ -85,12 +89,13 @@ func main() {
 	dbCertPath := flag.String("dbCertPath", "", "Absolute path to the database SSL CA certificate (required)")
 	credsCmd := flag.String("credsCmd", "", "Bash command to retrieve temporary database connection password")
 	credsOverride := flag.Bool("credsOverride", true, "Indicates whether to override the password provided through the client application")
+	ignoreUsername := flag.Bool("ignoreUsername", false, "By default, the tool matches provided username with the one in credsCmd command to decide on overriding the password. Set this flag to ignore username matching.")
 	version := flag.Bool("version", false, "Show pgpx version information")
 
 	// Parse the command-line arguments
 	flag.Parse()
 
-	if (*version == true) {
+	if *version == true {
 		fmt.Println(versionNumber)
 		return
 	}
@@ -143,7 +148,7 @@ func main() {
 	}
 
 	proxy.DialBackend = func(ctx context.Context, startupData *pgproxy.StartupData) (pgproxy.LogicalConn, error) {
-		return dialBackendWithDynamicPassword(ctx, startupData, *pgHostPort, *credsCmd, *credsOverride)
+		return dialBackendWithDynamicPassword(ctx, startupData, *pgHostPort, *credsCmd, *credsOverride, *ignoreUsername)
 	}
 
 	log.Trace().Msgf("Starting PostgreSQL proxy on %s ...", proxyHostPort)
