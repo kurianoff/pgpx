@@ -628,7 +628,7 @@ func SetupServer(server net.Conn, cfg *ServerConfig) (*pgproto3.Frontend, error)
 
 			case *pgproto3.AuthenticationSASL:
 				if err := scramAuth(fe, cfg.Startup.Password, msg.AuthMechanisms); err != nil {
-					return nil, err
+					return nil, fmt.Errorf("authentication failed: %v", err)
 				}
 
 			default:

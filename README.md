@@ -15,6 +15,9 @@ Usage of ./pgpx:
     	Bash command to retrieve temporary database connection password
   -credsOverride
     	Indicates whether to override the password provided through the client application (default true)
+  -ignoreUsername
+        By default, the tool matches provided username with the one in credsCmd command to decide on overriding the password.
+        Set this flag to ignore username matching. (default false)
   -dbCertPath string
     	Absolute path to the database SSL CA certificate (required)
   -pgHostPort string
